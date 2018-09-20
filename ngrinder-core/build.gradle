@@ -2,6 +2,7 @@ sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir
 description = "ngrinder-core"
 dependencies {
     compile files("${rootDir}/lib/sigar-native-1.0.jar")
+    compile files("${rootDir}/lib/grinder-3.9.1-patch.jar")
     compile (project(":ngrinder-runtime"))
     compile (project(":ngrinder-groovy"))
     compile (group: "org.hamcrest", name: "hamcrest-all", version:"1.1")
@@ -16,10 +17,19 @@ dependencies {
     compile (group: "org.apache.commons", name: "commons-compress", version:"1.4.1")
     compile (group: "com.beust", name: "jcommander", version:"1.32")
     compile (group: "junit", name: "junit-dep", version:"4.8.2")
+    compile (group: "dnsjava", name: "dnsjava", version:"2.1.6")
+    compile (group: "ch.qos.logback", name: "logback-classic", version:"1.0.0")
+    compile (group: "org.slf4j", name: "slf4j-api", version: slf4j_version)
+    compile (group: "net.sf.grinder", name: "grinder", version:"3.9.1") {
+        exclude (module: "clojure")
+        exclude (module: "jython")
+        exclude (module: "grinder-xmlbeans")
+        exclude (module: "jedit-syntax")
+        exclude (module: "asm")
+    }
     compile (group: "org.hibernate", name: "hibernate-core", version:"4.2.2.Final") {
         exclude (module: "jboss-logging")
     }
-    compile (group: "dnsjava", name: "dnsjava", version:"2.1.6")
 
     testCompile (group: "org.easytesting", name: "fest-assert", version:"1.4")
     testCompile (group: "org.mockito", name: "mockito-core", version:"1.8.5")
