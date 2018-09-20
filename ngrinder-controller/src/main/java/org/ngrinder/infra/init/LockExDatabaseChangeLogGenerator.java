@@ -17,7 +17,6 @@ import java.net.InetAddress;
 import java.sql.Timestamp;
 
 import liquibase.database.Database;
-import liquibase.database.core.CUBRIDDatabase;
 import liquibase.database.typeconversion.TypeConverterFactory;
 import liquibase.exception.UnexpectedLiquibaseException;
 import liquibase.exception.ValidationErrors;
@@ -81,28 +80,14 @@ public class LockExDatabaseChangeLogGenerator extends
 						database.getDatabaseChangeLogTableName(), "ID")
 						+ " = 1 AND ";
 
-		if (database instanceof CUBRIDDatabase) {
-			whereClause = whereClause
-							+ "( "
-							+ database.escapeColumnName(liquibaseSchema, 
-											database.getDatabaseChangeLogTableName(),
-											"LOCKED")
-							+ " = "
-							+ TypeConverterFactory.getInstance().findTypeConverter(database).getBooleanType()
-											.getFalseBooleanValue()
-							+ " OR "
-							+ database.escapeColumnName(liquibaseSchema, 
-											database.getDatabaseChangeLogTableName(),
-											"LOCKED") + " = '0')";
-		} else {
-			whereClause = whereClause
-							+ database.escapeColumnName(liquibaseSchema, 
-											database.getDatabaseChangeLogTableName(),
-											"LOCKED")
-							+ " = "
-							+ TypeConverterFactory.getInstance().findTypeConverter(database).getBooleanType()
-											.getFalseBooleanValue();
-		}
+		whereClause = whereClause
+						+ database.escapeColumnName(liquibaseSchema,
+										database.getDatabaseChangeLogTableName(),
+										"LOCKED")
+						+ " = "
+						+ TypeConverterFactory.getInstance().findTypeConverter(database).getBooleanType()
+										.getFalseBooleanValue();
+
 		updateStatement.setWhereClause(whereClause);
 
 		return SqlGeneratorFactory.getInstance().generateSql(updateStatement, database);
